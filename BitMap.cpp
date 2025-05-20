@@ -18,22 +18,35 @@ void markBitAt(int vBitPosition, SBitMap& vioBitMap)
 
 void clearBitAt(int vBitPosition, SBitMap& vioBitMap) 
 {
-	
+	vioBitMap.pMapData[vBitPosition / g_NumBitsInWord] &= ~(1 << (vBitPosition % g_NumBitsInWord));
 }
 
 bool isAvailableBitAt(int vBitPosition, const SBitMap& vBitMap)
 {
-
+	return !(vBitMap.pMapData[vBitPosition / g_NumBitsInWord] & (1 << (vBitPosition % g_NumBitsInWord)));
 }
 
 int countClearBits(const SBitMap& vBitMap)
 {
-
+	int count = 0;
+	for (int i=0; i<vBitMap.NumBits; ++i) 
+	{
+		if (isAvailableBitAt(i, vBitMap)) ++count;
+	}
+	return count;
 }
 
 int findAndSetAvailableBit(SBitMap& voBitMap) 
 {
-	
+	for (int i = 0; i < voBitMap.NumBits; ++i) 
+	{
+		if (isAvailableBitAt(i, voBitMap)) 
+		{
+			markBitAt(i, voBitMap);
+			return i;
+		}
+	}
+	return -1; // Return -1 if no available bit is found
 }
 
 void printfBitMap(const SBitMap& vBitMap)
